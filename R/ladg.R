@@ -1,5 +1,5 @@
-#' @name LADG
-#' @aliases LADG
+#' @name ladg
+#' @aliases ladg
 #' @title Computes the leverage adjusted duration gap
 #' @description Takes the duration of assets and the scaled duration of liabilities,
 #'     subtracting the scaled duration of liabilities from the duration of assets

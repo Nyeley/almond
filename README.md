@@ -8,4 +8,4 @@ library(dmdl2)
 
 devtools::install(build_vignettes = TRUE)
 
-browseVignettes("dmdl2")
+browseVignettes(package = "dmdl2")

@@ -1,13 +1,60 @@
 ---
-title: "dmdl2"
+title: "Package 'dmdl2'"
 author: "Staenz Phoebe, Gaduel Tetteng"
-date: "11 May 2019"
+date: "`r date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{dmdl2}
+  %\VignetteIndexEntry{Package 'dmdl2'}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+### dmdl2
+
+Type: Package
+
+Title: Duration gap analysis
+
+Version: 0.1.5
+
+Description: The package aids in the measurement and observation of interest rate risk on the net worth of a financial intermediator.
+
+Depends: R (>= 3.5)
+
+License: GPL-3
+
+Encoding: UTF-8
+
+LazyData: true
+
+RoxygenNote: 6.1.1
+
+Suggests: 
+    knitr,
+    rmarkdown
+
+VignetteBuilder: knitr
+
+URL: https://github.com/Nyeley/dmdl2
+
+Repository: GitHub
+
+Author: Tetteng Gaduel <tettet@usi.ch>, Phoebe Staenz <phoebe.staenz@usi.ch>
+
+Maintainer: Tetteng Gaduel <tettet@usi.ch>, Phoebe Staenz <phoebe.staenz@usi.ch>
+
+## R Topics Documented
+
+change
+
+data
+
+deltaE
+
+differenceE
+
+duration
+
+ladg
 
 ## Duration Model Introduction
 
@@ -30,14 +77,58 @@ vignette: >
 
   In order to explain the functions and their results, the remainder of the vignette includes examples. The examples contain data prepared from the 2018 annual report from Deutsche Bank AG. 
 
+### Data
+
   Firstly, load package's installed data into your session as follows.
-````{r echo = FALSE, results= 'asis'}
+  
+````{r echo=TRUE, results= 'asis'}
 library(dmdl2)
-
 data(Assets)
-
 data(Liabilities)
 ```
+
+***
+
+Document Type: Data
+
+Name: Assets
+
+Usage: Assets
+
+Description: Data set containg three numerical columns, value, duration, and yield of consolidated balance sheet assets. The data set is  used in the examples provided in the vignette.
+
+Format: A data frame with 4 columns
+
+* Deutsche. Descritption of the assets in the asset portfolio
+  
+* Asset. Values of the assets from the assetportfolio
+  
+* Duration. The durations of the assets from the asset portfolio
+  
+* Yield. The yields of the assets from the asset portfolio
+  
+Keyword: datasets
+
+***
+
+Document Type: Data
+
+Name: Liabilities
+
+Usage: Liabilities
+
+Description: A data set containing the consolidated balance sheet liabilities values, liabilities durations, and liabilities yields.
+
+Format: A data frame with 4 columns
+
+* Deutsche. Descritption of the liabilities
+* Liabilities. Value of the liabilities
+* Duration. The duration of the liabilities
+* Yield. The yield of the liabilities
+
+Keyword: Datasets
+
+*** 
 
   Below is a snapshot of the data prepared from Deutsche Bank AG, 2018 AR.
 
@@ -61,6 +152,26 @@ duration(Liabilities$Liability, Liabilities$Duration)
 ```
 
 ## Duration
+
+***
+
+Name: duration
+
+Title: Computes the duration of assets or liabilities
+
+Usage: duration (x, y)
+
+Arguments: 
+
+* {x} Vector containing asset or liabilities positions in liability or asset portfolio
+
+* {y} Vector containing duration of asset or liabilities in liability or asset portfolio
+
+Value: aggregate duration of assets or liabilities
+
+Description: Takes the positions of assets or liabilities, computes their porportions relative to the total liability portfolio or asset portfolio,     and returns the aggregate duration.
+
+***
 
   The first part of the analysis is determining the duration of the assets and the liabilities. The "duration" function implements the formulae depicted below. The formulae are summations of the proportion and duration of assets or liabilities in the asset or liability portfolio at market values. The result is a weighted duration of assets or liabilities.
 
@@ -93,6 +204,30 @@ duration(Liabilities$Liability, Liabilities$Duration)
 ```
 
 ## Change
+
+***
+
+Name: change
+
+Title: Computes the aggregate change in assets or liabilities, due to a respective predicted change in interest rate level
+
+Usage: change (x, y, z, r)
+
+Arguments: 
+
+* {x} Vector containing asset or liabilities positions in asset or liability portfolio
+
+* {y} Vector containing duration of asset or liabilities in asset or liability portfolio
+
+* {z} Vector containing the yield of the asset or liabilities in asset or liability portfolio
+
+* {r} The predicted change in ineterst rate level
+
+Value: aggregate change in assets or liabilities
+
+Description: Takes the positions of assets or liabilities together with the respective durations and yields and computes the expected overall change     in the value of assets or liabilities resulting from the predicted change in interest rate level
+
+***
 
   In the previous section we looked at the duration and there was no mention of the interest rate. It was not relevant for the calculation of the duration of assets and liabilities.  Starting in this section the interest rate gains relevancy. This section deals with the interest rate exposure of the assets and liabilities. We assume a predicted shock in the level of interest rate.
 
@@ -131,7 +266,40 @@ Executing the function with our vectors of liability value, liabilities duration
 change(Liabilities$Liability, Liabilities$Duration, Liabilities$Yield, 0.0025)
 ```
 
-## Simple Change in Equity
+## Difference in Equity
+
+### differenceE
+
+Name: differenceE
+
+Title: Computes the change in equity
+
+Usage: differenceE (x, y, z, r1, h, i, j, r2)
+
+Arguments:
+
+* {x} Vector containing asset positions from asset portfolio
+
+* {y} Vector containing duration of assets from the asset portfolio
+
+* {z} Vector containing asset yields from the asset portfolio
+
+* {r1} The predicted change in interest rate level for assets
+
+* {h} Vector containing values of liabilities from the liabilities portfolio
+
+* {i} Vector containing duration of liabilities from the liabilities portfolio
+
+* {j} Vector containing the yields of liabilities from the liabilities portfolio
+
+* {r2} The predicted change in interest rate level for liabilities
+
+Value: The change in equity
+
+Description: Takes the aggregare changes in assets and liabilities, subtracting liabilities from assets, returning the change in equity.
+    Note: used when the predicted change in interest level for assets and liabilities asre different. (spread > 0)
+
+***
 
   When analizing the effect of interest rate, equity is also to be considered. Considering the change in equity, will help determine whether the financial intermediary will become insolvent. Due to different changes in interest rate for assets and liabilities (spread in i.r. > 0), the simplest way of calculating the effect of the predicted interest rate changes on equity is to subtract the aggregate change in assets by the aggregate change in liabilities.
 
@@ -171,6 +339,31 @@ differenceE(Assets$Asset, Assets$Duration, Assets$Yield, 0.0015, Liabilities$Lia
 
 ## Leverage Adjusted Duration Gap
 
+### ladg
+
+Name: ladg
+
+Title: Computes the leverage adjusted duration gap
+
+Usage: ladg (x, y, z, w)
+
+Arguments: 
+
+* {x} Vector containing asset positions from the asset portfolio
+
+* {y} Vector containing duration of assets from the asset portfolio
+
+* {z} Vector containing liability positions from the liabilities portfolio
+
+* {w} Vector containing duration of liabilities from the liabilities portfolio
+
+Value: leverage adjusted duration gap
+
+Description: Takes the duration of assets and the scaled duration of liabilities,
+    subtracting the scaled duration of liabilities from the duration of assets
+
+***
+
   The leverage adjusted duration gap uses the ratio between the total assets and the total liabilities to scale the duration of liabilities and to determine the gap between the scaled duration of liabilities and duration of assets. The larger the gap, the greater the duration mismatch.
 
   In the formula depicted below are the duration of assets and liabilities, as well as the factor "k". "k" represents the market measure of risk, which in turn is the ratio between asets and liabilities.
@@ -206,6 +399,35 @@ ladg(Assets$Asset, Assets$Duration, Liabilities$Liability, Liabilities$Duration)
 ```
 
 ## Change In Equity And The LADG
+
+### deltaE
+
+Name: deltaE
+
+Title: Computes the change in equity
+
+Usage: deltaE (x, y, z, w, r)
+
+Arguments:
+
+* {x} Vector containing asset positions in asset portfolio
+
+* {y} Vector containing durations of assets from the asset portfolio
+
+* {z} Vector containing liability positions from the liabilities portfolio
+
+* {w} Vector containing duration of liabilities from the liabilities portfolio
+
+* {r} The predicted change in interest rate level across both assets and liabilities
+
+
+Value: leverage adjusted duration gap
+
+Description: Takes the duration of assets and the duration of liabilities,
+    applies them to the leverage adjusted duration gap computation, ultimately applies
+    the multiplication of negative ladg and total assets and the predicted change in interest rate level
+
+***
 
   The LADG is used to calculate the change in equity, when the expected interest rate shock for assets and liabilities is the same (spread = 0). The formula from the aggregate change in equity simplifies, due to the interest rate shock being the same for both assets and liabilites. Instead of calculating the difference between change in assets and the change in liabilities, the individual changes are replaced wtih the negative LADG.
 

@@ -1,8 +1,6 @@
-## ----echo = FALSE, results= 'asis'---------------------------------------
+## ----echo=TRUE, results= 'asis'------------------------------------------
 library(dmdl2)
-
 data(Assets)
-
 data(Liabilities)
 
 ## ----echo = FALSE, results= 'asis'---------------------------------------

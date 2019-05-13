@@ -12,9 +12,8 @@
 
 <meta name="author" content="Staenz Phoebe, Gaduel Tetteng" />
 
-<meta name="date" content="2019-05-11" />
 
-<title>dmdl2</title>
+<title>Package dmdl2</title>
 
 
 
@@ -68,12 +67,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">dmdl2</h1>
+<h1 class="title toc-ignore">Package ‘dmdl2’</h1>
 <h4 class="author"><em>Staenz Phoebe, Gaduel Tetteng</em></h4>
-<h4 class="date"><em>11 May 2019</em></h4>
+<h4 class="date"><em>Mon May 13 23:56:47 2019</em></h4>
 
 
 
+<div id="dmdl2" class="section level3">
+<h3>dmdl2</h3>
+<p>Type: Package</p>
+<p>Title: Duration gap analysis</p>
+<p>Version: 0.1.5</p>
+<p>Description: The package aids in the measurement and observation of interest rate risk on the net worth of a financial intermediator.</p>
+<p>Depends: R (&gt;= 3.5)</p>
+<p>License: GPL-3</p>
+<p>Encoding: UTF-8</p>
+<p>LazyData: true</p>
+<p>RoxygenNote: 6.1.1</p>
+<p>Suggests: knitr, rmarkdown</p>
+<p>VignetteBuilder: knitr</p>
+<p>URL: <a href="https://github.com/Nyeley/dmdl2" class="uri">https://github.com/Nyeley/dmdl2</a></p>
+<p>Repository: GitHub</p>
+<p>Author: Tetteng Gaduel <a href="mailto:tettet@usi.ch">tettet@usi.ch</a>, Phoebe Staenz <a href="mailto:phoebe.staenz@usi.ch">phoebe.staenz@usi.ch</a></p>
+<p>Maintainer: Tetteng Gaduel <a href="mailto:tettet@usi.ch">tettet@usi.ch</a>, Phoebe Staenz <a href="mailto:phoebe.staenz@usi.ch">phoebe.staenz@usi.ch</a></p>
+</div>
+<div id="r-topics-documented" class="section level2">
+<h2>R Topics Documented</h2>
+<p>change</p>
+<p>data</p>
+<p>deltaE</p>
+<p>differenceE</p>
+<p>duration</p>
+<p>ladg</p>
+</div>
 <div id="duration-model-introduction" class="section level2">
 <h2>Duration Model Introduction</h2>
 <p>This vignette explains the formulae applied in the functions from the “dmdl2” package and reveals the analysis power of the results. The package is created for economists, who need to measure and manage interest rate risk exposures of financial intermediaries. There are two popular approaches to measure interest rate risk: the repricing model and the duration model. The formulae used in the package are the formulae applied in the duration model. The duration model is used to evaluate the financial intermediary’s overall ineterst rate exposure, in other words the duration gap. The duration gap analysis aids in comprehending the impact on the financial intermediary’s net worth and if the financial intermediary will become insolvent, when the interest rate changes.</p>
@@ -91,7 +117,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 <p>The package is intently written to avoid time consuming calculations in excel and overly crowded excel sheets. The functions are created, such that the user is simply required to provide a file with three numerical columns: the asset or liability value, duration in years, and the yield.mThese will be the only inputs necessary for any of the functions in the package.</p>
 <p>In order to explain the functions and their results, the remainder of the vignette includes examples. The examples contain data prepared from the 2018 annual report from Deutsche Bank AG.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
 <p>Firstly, load package’s installed data into your session as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dmdl2)
+<span class="kw">data</span>(Assets)
+<span class="kw">data</span>(Liabilities)</code></pre></div>
+<hr />
+<p>Document Type: Data</p>
+<p>Name: Assets</p>
+<p>Usage: Assets</p>
+<p>Description: Data set containg three numerical columns, value, duration, and yield of consolidated balance sheet assets. The data set is used in the examples provided in the vignette.</p>
+<p>Format: A data frame with 4 columns</p>
+<ul>
+<li><p>Deutsche. Descritption of the assets in the asset portfolio</p></li>
+<li><p>Asset. Values of the assets from the assetportfolio</p></li>
+<li><p>Duration. The durations of the assets from the asset portfolio</p></li>
+<li><p>Yield. The yields of the assets from the asset portfolio</p></li>
+</ul>
+<p>Keyword: datasets</p>
+<hr />
+<p>Document Type: Data</p>
+<p>Name: Liabilities</p>
+<p>Usage: Liabilities</p>
+<p>Description: A data set containing the consolidated balance sheet liabilities values, liabilities durations, and liabilities yields.</p>
+<p>Format: A data frame with 4 columns</p>
+<ul>
+<li>Deutsche. Descritption of the liabilities</li>
+<li>Liabilities. Value of the liabilities</li>
+<li>Duration. The duration of the liabilities</li>
+<li>Yield. The yield of the liabilities</li>
+</ul>
+<p>Keyword: Datasets</p>
+<hr />
 <p>Below is a snapshot of the data prepared from Deutsche Bank AG, 2018 AR.</p>
 <table>
 <caption>Assets</caption>
@@ -160,8 +218,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 duration(Liabilities$Liability, Liabilities$Duration)</code></pre>
 </div>
+</div>
 <div id="duration" class="section level2">
 <h2>Duration</h2>
+<hr />
+<p>Name: duration</p>
+<p>Title: Computes the duration of assets or liabilities</p>
+<p>Usage: duration (x, y)</p>
+<p>Arguments:</p>
+<ul>
+<li><p>{x} Vector containing asset or liabilities positions in liability or asset portfolio</p></li>
+<li><p>{y} Vector containing duration of asset or liabilities in liability or asset portfolio</p></li>
+</ul>
+<p>Value: aggregate duration of assets or liabilities</p>
+<p>Description: Takes the positions of assets or liabilities, computes their porportions relative to the total liability portfolio or asset portfolio, and returns the aggregate duration.</p>
+<hr />
 <p>The first part of the analysis is determining the duration of the assets and the liabilities. The “duration” function implements the formulae depicted below. The formulae are summations of the proportion and duration of assets or liabilities in the asset or liability portfolio at market values. The result is a weighted duration of assets or liabilities.</p>
 <div class="figure">
 <img src="data:image/png;base64,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" />
@@ -186,6 +257,20 @@ duration(Liabilities$Liability, Liabilities$Duration)</code></pre>
 </div>
 <div id="change" class="section level2">
 <h2>Change</h2>
+<hr />
+<p>Name: change</p>
+<p>Title: Computes the aggregate change in assets or liabilities, due to a respective predicted change in interest rate level</p>
+<p>Usage: change (x, y, z, r)</p>
+<p>Arguments:</p>
+<ul>
+<li><p>{x} Vector containing asset or liabilities positions in asset or liability portfolio</p></li>
+<li><p>{y} Vector containing duration of asset or liabilities in asset or liability portfolio</p></li>
+<li><p>{z} Vector containing the yield of the asset or liabilities in asset or liability portfolio</p></li>
+<li><p>{r} The predicted change in ineterst rate level</p></li>
+</ul>
+<p>Value: aggregate change in assets or liabilities</p>
+<p>Description: Takes the positions of assets or liabilities together with the respective durations and yields and computes the expected overall change in the value of assets or liabilities resulting from the predicted change in interest rate level</p>
+<hr />
 <p>In the previous section we looked at the duration and there was no mention of the interest rate. It was not relevant for the calculation of the duration of assets and liabilities. Starting in this section the interest rate gains relevancy. This section deals with the interest rate exposure of the assets and liabilities. We assume a predicted shock in the level of interest rate.</p>
 <p>The duration approximation from the previous section is used to determine the effect the change in interest rate has on the individual assets or liabilities and ultimately on the total asset or liabilities position of the financial intermediary. The functions are identical for the assets and liabilities. Assets will use the asset vector, asset duration vector, asset yield vector, and the specific predicted change in interest rate specific to assets. The liabilities will use the respective vectors for their calculation.</p>
 <div class="figure">
@@ -215,8 +300,27 @@ duration(Liabilities$Liability, Liabilities$Duration)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">change</span>(Liabilities<span class="op">$</span>Liability, Liabilities<span class="op">$</span>Duration, Liabilities<span class="op">$</span>Yield, <span class="fl">0.0025</span>)</code></pre></div>
 <p>[1] -5918.691</p>
 </div>
-<div id="simple-change-in-equity" class="section level2">
-<h2>Simple Change in Equity</h2>
+<div id="difference-in-equity" class="section level2">
+<h2>Difference in Equity</h2>
+<div id="differencee" class="section level3">
+<h3>differenceE</h3>
+<p>Name: differenceE</p>
+<p>Title: Computes the change in equity</p>
+<p>Usage: differenceE (x, y, z, r1, h, i, j, r2)</p>
+<p>Arguments:</p>
+<ul>
+<li><p>{x} Vector containing asset positions from asset portfolio</p></li>
+<li><p>{y} Vector containing duration of assets from the asset portfolio</p></li>
+<li><p>{z} Vector containing asset yields from the asset portfolio</p></li>
+<li><p>{r1} The predicted change in interest rate level for assets</p></li>
+<li><p>{h} Vector containing values of liabilities from the liabilities portfolio</p></li>
+<li><p>{i} Vector containing duration of liabilities from the liabilities portfolio</p></li>
+<li><p>{j} Vector containing the yields of liabilities from the liabilities portfolio</p></li>
+<li><p>{r2} The predicted change in interest rate level for liabilities</p></li>
+</ul>
+<p>Value: The change in equity</p>
+<p>Description: Takes the aggregare changes in assets and liabilities, subtracting liabilities from assets, returning the change in equity. Note: used when the predicted change in interest level for assets and liabilities asre different. (spread &gt; 0)</p>
+<hr />
 <p>When analizing the effect of interest rate, equity is also to be considered. Considering the change in equity, will help determine whether the financial intermediary will become insolvent. Due to different changes in interest rate for assets and liabilities (spread in i.r. &gt; 0), the simplest way of calculating the effect of the predicted interest rate changes on equity is to subtract the aggregate change in assets by the aggregate change in liabilities.</p>
 <p>The formulae depicted below have been used seperately in the previous sections, computing either duration of the assets and liabilities or the change in assets and liabilities, when experiencing a shock in the level of interest rate. In this section the individual formulae come together to compute the effect the change in interest rate for assets and liabilities has on the equity position of the financial intermediary.</p>
 <div class="figure">
@@ -246,8 +350,24 @@ duration(Liabilities$Liability, Liabilities$Duration)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">differenceE</span>(Assets<span class="op">$</span>Asset, Assets<span class="op">$</span>Duration, Assets<span class="op">$</span>Yield, <span class="fl">0.0015</span>, Liabilities<span class="op">$</span>Liability, Liabilities<span class="op">$</span>Duration, Liabilities<span class="op">$</span>Yield, <span class="fl">0.0025</span>)</code></pre></div>
 <p>[1] -3925.179</p>
 </div>
+</div>
 <div id="leverage-adjusted-duration-gap" class="section level2">
 <h2>Leverage Adjusted Duration Gap</h2>
+<div id="ladg" class="section level3">
+<h3>ladg</h3>
+<p>Name: ladg</p>
+<p>Title: Computes the leverage adjusted duration gap</p>
+<p>Usage: ladg (x, y, z, w)</p>
+<p>Arguments:</p>
+<ul>
+<li><p>{x} Vector containing asset positions from the asset portfolio</p></li>
+<li><p>{y} Vector containing duration of assets from the asset portfolio</p></li>
+<li><p>{z} Vector containing liability positions from the liabilities portfolio</p></li>
+<li><p>{w} Vector containing duration of liabilities from the liabilities portfolio</p></li>
+</ul>
+<p>Value: leverage adjusted duration gap</p>
+<p>Description: Takes the duration of assets and the scaled duration of liabilities, subtracting the scaled duration of liabilities from the duration of assets</p>
+<hr />
 <p>The leverage adjusted duration gap uses the ratio between the total assets and the total liabilities to scale the duration of liabilities and to determine the gap between the scaled duration of liabilities and duration of assets. The larger the gap, the greater the duration mismatch.</p>
 <p>In the formula depicted below are the duration of assets and liabilities, as well as the factor “k”. “k” represents the market measure of risk, which in turn is the ratio between asets and liabilities.</p>
 <div class="figure">
@@ -277,8 +397,25 @@ duration(Liabilities$Liability, Liabilities$Duration)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ladg</span>(Assets<span class="op">$</span>Asset, Assets<span class="op">$</span>Duration, Liabilities<span class="op">$</span>Liability, Liabilities<span class="op">$</span>Duration)</code></pre></div>
 <p>[1] 3.355576</p>
 </div>
+</div>
 <div id="change-in-equity-and-the-ladg" class="section level2">
 <h2>Change In Equity And The LADG</h2>
+<div id="deltae" class="section level3">
+<h3>deltaE</h3>
+<p>Name: deltaE</p>
+<p>Title: Computes the change in equity</p>
+<p>Usage: deltaE (x, y, z, w, r)</p>
+<p>Arguments:</p>
+<ul>
+<li><p>{x} Vector containing asset positions in asset portfolio</p></li>
+<li><p>{y} Vector containing durations of assets from the asset portfolio</p></li>
+<li><p>{z} Vector containing liability positions from the liabilities portfolio</p></li>
+<li><p>{w} Vector containing duration of liabilities from the liabilities portfolio</p></li>
+<li><p>{r} The predicted change in interest rate level across both assets and liabilities</p></li>
+</ul>
+<p>Value: leverage adjusted duration gap</p>
+<p>Description: Takes the duration of assets and the duration of liabilities, applies them to the leverage adjusted duration gap computation, ultimately applies the multiplication of negative ladg and total assets and the predicted change in interest rate level</p>
+<hr />
 <p>The LADG is used to calculate the change in equity, when the expected interest rate shock for assets and liabilities is the same (spread = 0). The formula from the aggregate change in equity simplifies, due to the interest rate shock being the same for both assets and liabilites. Instead of calculating the difference between change in assets and the change in liabilities, the individual changes are replaced wtih the negative LADG.</p>
 <div class="figure">
 <img src="data:image/png;base64,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" />
@@ -310,6 +447,7 @@ duration(Liabilities$Liability, Liabilities$Duration)</code></pre>
   }</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deltaE</span>(Assets<span class="op">$</span>Asset, Assets<span class="op">$</span>Duration, Liabilities<span class="op">$</span>Liability, Liabilities<span class="op">$</span>Duration, <span class="op">-</span><span class="fl">0.0030</span>)</code></pre></div>
 <p>[1] 13571.34</p>
+</div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
